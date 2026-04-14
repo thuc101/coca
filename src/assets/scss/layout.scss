@@ -1,0 +1,204 @@
+// =====================
+// VARIABLES
+// =====================
+$sidebar-bg: #2ed573;
+$sidebar-hover: #57606f;
+$primary: #1e90ff;
+$parent-active: #3742fa;
+$danger: #ff4757;
+
+// =====================
+// BASE RESET
+// =====================
+* {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 14px; // 👈 ROOT FONT SIZE CONTROL (quan trọng nhất)
+}
+
+body {
+  font-size: 1rem; // = 22px theo html
+  margin: 0;
+  padding: 0;
+  font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;//Verdana, Geneva, Tahoma, sans-serif;//'Times New Roman', Times, serif; //Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+  background: #f5f6fa;
+}
+
+// =====================
+// LAYOUT
+// =====================
+.layout {
+  display: flex;
+  height: 100vh;
+}
+
+// =====================
+// SIDEBAR
+// =====================
+.sidebar {
+  width: 230px;
+  background: $sidebar-bg;
+  color: #fff;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+
+  .logo {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 1rem;
+    font-weight: 600;
+  }
+
+  .menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .menu-item {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background 0.2s;
+
+    &:hover {
+      background: $sidebar-hover;
+    }
+
+    &.active {
+      background: $primary;
+    }
+
+    &.parent.active {
+      background: $parent-active;
+    }
+  }
+
+  .icon {
+    margin-right: 10px;
+  }
+
+  .submenu {
+    list-style: none;
+    padding-left: 15px;
+    margin-top: 5px;
+
+    .sub {
+      font-size: 0.85rem;
+      padding: 8px 10px;
+      border-radius: 5px;
+      cursor: pointer;
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.15);
+      }
+    }
+  }
+
+  .arrow {
+    margin-left: auto;
+    transition: transform 0.2s;
+
+    &.open {
+      transform: rotate(90deg);
+    }
+  }
+}
+
+// =====================
+// MAIN
+// =====================
+.main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+// =====================
+// HEADER
+// =====================
+.header {
+  height: 50px;
+  background: #f1f2f6;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  border-bottom: 1px solid #ddd;
+
+  .right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .user {
+    font-size: 0.9rem;
+  }
+
+  .logout {
+    padding: 5px 12px;
+    border: none;
+    background: $danger;
+    color: white;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: 0.2s;
+
+    &:hover {
+      opacity: 0.85;
+    }
+  }
+}
+
+// =====================
+// CONTENT
+// =====================
+.content {
+  flex: 1;
+  padding: 20px;
+  background: #f5f6fa;
+  overflow: auto;
+  font-size: 1rem;
+}
+
+// =====================
+// FOOTER
+// =====================
+.footer {
+  height: 40px;
+  background: #fff;
+  border-top: 1px solid #ddd;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  font-size: 0.8rem;
+  color: #555;
+}
+
+// =====================
+// REMOVE CONFLICT RULE ❌ (đã xoá)
+// =====================
+// ❌ KHÔNG DÙNG:
+// .navbar,
+// .sidebar,
+// .content,
+// .footer {
+//   font-size: 14px;
+// }
+
+.form-group {
+  margin-bottom: 5px; /* mặc định bootstrap ~15px */
+}
+
+@import "vue-select/dist/vue-select.css";
