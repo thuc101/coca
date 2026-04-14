@@ -1,0 +1,2 @@
+"use strict";(self["webpackChunkmy_app2_layout_drop_bs"]=self["webpackChunkmy_app2_layout_drop_bs"]||[]).push([[598],{9598:function(t,u,s){s.r(u),s.d(u,{default:function(){return e}});var n=function(){var t=this;t._self._c;return t._m(0)},a=[function(){var t=this,u=t._self._c;return u("div",{staticClass:"about"},[u("h1",[t._v("This is About page")])])}],l=s(1656),r={},_=(0,l.A)(r,n,a,!1,null,null,null),e=_.exports}}]);
+//# sourceMappingURL=598.c8ba8ceb.js.map

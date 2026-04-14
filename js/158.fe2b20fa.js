@@ -1,0 +1,2 @@
+"use strict";(self["webpackChunkmy_app2_layout_drop_bs"]=self["webpackChunkmy_app2_layout_drop_bs"]||[]).push([[158],{9158:function(u,n,s){s.r(n),s.d(n,{default:function(){return e}});var t=function(){var u=this;u._self._c;return u._m(0)},_=[function(){var u=this,n=u._self._c;return n("div",[n("h1",[u._v("This is Hoa")]),u._v(" this is Hoa ")])}],r=s(1656),l={},a=(0,r.A)(l,t,_,!1,null,null,null),e=a.exports}}]);
+//# sourceMappingURL=158.fe2b20fa.js.map
