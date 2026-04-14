@@ -2,6 +2,7 @@
     <b-container fluid>
         <!-- User Interface controls -->
         <!-- {{ items }}  -->
+        <!-- {{ dsChi }} -->
         <b-row>
 
             <b-col lg="4" class="my-1">
@@ -71,13 +72,38 @@
 
             </template>
 
-            <template #row-details="row">
-                <b-card>
-                    <ul>
-                        <li v-for="(value, key) in row.item" :key="key">{{ key }}: {{ value }}</li>
-                    </ul>
-                </b-card>
-            </template>
+
+<template #row-details="row">
+  <b-card>
+
+    <h6>📅 {{ fmtDate(row.item.Ngay) }}</h6>
+
+    <p>
+      💰 Thu: {{ Number(row.item.Thu).toLocaleString('vi-VN') }} |
+      💸 Chi: {{ Number(row.item.Chi).toLocaleString('vi-VN') }}
+    </p>
+
+    <hr>
+
+    <b>🔵 Thu:</b>
+    <ul>
+      <li v-for="i in row.item.itemsThu" :key="'t'+i.Id">
+        {{ i.GhiChu }} - {{ Number(i.TienThu).toLocaleString('vi-VN') }}
+      </li>
+    </ul>
+
+    <b>🔴 Chi:</b>
+    <ul>
+      <li v-for="i in row.item.itemsChi" :key="'c'+i.Id">
+        {{ i.GhiChu }} - {{ Number(i.TienChi).toLocaleString('vi-VN') }}
+      </li>
+    </ul>
+
+  </b-card>
+</template>
+
+
+
         </b-table>
 
         <!-- Info modal -->
@@ -94,6 +120,7 @@ import { chiService } from '@/db/chiService';
 export default {
     data() {
         return {
+            dsChi: [],
             items: [
                 // {name : 'thuc' , age: 60},
                 // {name : 'thuc1' , age: 61},
@@ -102,15 +129,15 @@ export default {
             ],
             fields: [
 
-                { key: 'Ngay', label: 'Ngay', class: "text-left", sortable: true, thClass: "text-center", tdClass: "align-middle", thStyle: { width: "60%" } , formatter:'fmtDate' },
-                { key: 'Thu', label: 'Thu', class: "text-left text-md-center", sortable: true, thClass: "text-center", tdClass: "align-middle", thStyle: { width: "10%" } , formatter: v => Number(v).toLocaleString('vi-VN') },
-                { key: 'Chi', label: 'Chi', class: "text-left text-md-center", sortable: true, thClass: "text-center", tdClass: "align-middle", thStyle: { width: "10%" } , formatter: v => Number(v).toLocaleString('vi-VN') },
-                
-/*
-                { key: 'Id', label: 'Id', class: "text-left text-md-center", sortable: true, thClass: "text-center", tdClass: "align-middle", thStyle: { width: "10%" } },
-                { key: 'Ten', label: 'Tên', class: "text-left", sortable: true, thClass: "text-center", tdClass: "align-middle", thStyle: { width: "60%" } },
-                { key: 'DonGia', label: 'Đơn giá', class: "text-left text-md-center", sortable: true, thClass: "text-center", tdClass: "align-middle", thStyle: { width: "10%" } },
-*/                 
+                { key: 'Ngay', label: 'Ngày', class: "text-left", sortable: true, thClass: "text-center", tdClass: "align-middle", thStyle: { width: "60%" }, formatter: 'fmtDate' },
+                { key: 'Thu', label: 'Thu vào', class: "text-left text-md-center", sortable: true, thClass: "text-center", tdClass: "align-middle", thStyle: { width: "10%" }, formatter: v => Number(v).toLocaleString('vi-VN') },
+                { key: 'Chi', label: 'Chi ra', class: "text-left text-md-center", sortable: true, thClass: "text-center", tdClass: "align-middle", thStyle: { width: "10%" }, formatter: v => Number(v).toLocaleString('vi-VN') },
+
+                /*
+                                { key: 'Id', label: 'Id', class: "text-left text-md-center", sortable: true, thClass: "text-center", tdClass: "align-middle", thStyle: { width: "10%" } },
+                                { key: 'Ten', label: 'Tên', class: "text-left", sortable: true, thClass: "text-center", tdClass: "align-middle", thStyle: { width: "60%" } },
+                                { key: 'DonGia', label: 'Đơn giá', class: "text-left text-md-center", sortable: true, thClass: "text-center", tdClass: "align-middle", thStyle: { width: "10%" } },
+                */
                 { key: 'actions', label: 'Actions', class: "text-center", thClass: "text-center", tdClass: "align-middle", thStyle: { width: "20%" } }
             ],
             totalRows: 1,
@@ -141,8 +168,10 @@ export default {
     },
     async mounted() {
         // Set the initial number of items
-        this.items=await this.lds_thuChi();
+        this.items = await this.lds_thuChi();
         this.totalRows = this.items.length
+
+        this.dsChi = await this.ldsChiTheoNgay();
     },
     methods: {
         info(item, index, button) {
@@ -171,6 +200,7 @@ export default {
 
         },
         onTest(item) {
+            console.log(JSON.stringify(item));
             let _showDetails = item._showDetails == undefined || item._showDetails == false ? false : true;
             //alert(_showDetails)
 
@@ -213,13 +243,129 @@ export default {
             return final;
 
         },
-      fmtDate(v) {
-          if (!v) return ''
-          const d = new Date(v)
-          return `${d.getDate().toString().padStart(2,'0')}/${
-          (d.getMonth()+1).toString().padStart(2,'0')
-          }/${d.getFullYear()}`
-      },        
+        fmtDate(v) {
+            if (!v) return ''
+            const d = new Date(v)
+            return `${d.getDate().toString().padStart(2, '0')}/${(d.getMonth() + 1).toString().padStart(2, '0')
+                }/${d.getFullYear()}`
+        },
+
+        async ldsChiTheoNgay() {
+            const res = await chiService.getAll()
+            const data = res.data || res
+
+            const getDate = (d) => {
+                if (!d) return 'unknown'
+                const date = new Date(d)
+                return date.toISOString().slice(0, 10)
+            }
+
+            const groupByDate = Object.values(
+                data.reduce((acc, item) => {
+                    const date = getDate(item.Ngay)
+
+                    if (!acc[date]) {
+                        acc[date] = {
+                            ngay: date,
+                            items: []
+                        }
+                    }
+
+                    acc[date].items.push(item)
+
+                    return acc
+                }, {})
+            )
+
+            return groupByDate
+        },
+        async ldsChiTheoNgay2(ngay) {
+            const res = await chiService.getAll()
+            const data = res.data || res
+
+            const getDate = (d) => {
+                const date = new Date(d)
+                return date.toISOString().slice(0, 10)
+            }
+
+            return data.filter(item => getDate(item.Ngay) === ngay)
+        },
+        // const ds = await this.ldsChiTheoNgay2('2026-04-14')
+        // console.log(ds) 
+
+        async lds_thuChi() {
+
+            const thu = await thuService.getAll();
+            const chi = await chiService.getAll();
+
+            const getDate = (d) => new Date(d).toISOString().slice(0, 10);
+
+            const result = {};
+
+            thu.forEach(x => {
+                const d = getDate(x.Ngay);
+                if (!result[d]) result[d] = { Ngay: d, Thu: 0, Chi: 0, itemsChi: [] };
+                result[d].Thu += Number(x.TienThu || 0);
+            });
+
+            chi.forEach(x => {
+                const d = getDate(x.Ngay);
+                if (!result[d]) result[d] = { Ngay: d, Thu: 0, Chi: 0, itemsChi: [] };
+
+                result[d].Chi += Number(x.TienChi || 0);
+                result[d].itemsChi.push(x); // 🔥 thêm dòng này
+            });
+
+            return Object.values(result);
+        },
+
+        async lds_thuChi() {
+
+            const thu = await thuService.getAll();
+            const chi = await chiService.getAll();
+
+            const getDate = (d) => new Date(d).toISOString().slice(0, 10);
+
+            const result = {};
+
+            // 🔵 Thu
+            thu.forEach(x => {
+                const d = getDate(x.Ngay);
+
+                if (!result[d]) {
+                    result[d] = {
+                        Ngay: d,
+                        Thu: 0,
+                        Chi: 0,
+                        itemsThu: [],
+                        itemsChi: []
+                    };
+                }
+
+                result[d].Thu += Number(x.TienThu || 0);
+                result[d].itemsThu.push(x);
+            });
+
+            // 🔴 Chi
+            chi.forEach(x => {
+                const d = getDate(x.Ngay);
+
+                if (!result[d]) {
+                    result[d] = {
+                        Ngay: d,
+                        Thu: 0,
+                        Chi: 0,
+                        itemsThu: [],
+                        itemsChi: []
+                    };
+                }
+
+                result[d].Chi += Number(x.TienChi || 0);
+                result[d].itemsChi.push(x);
+            });
+
+            return Object.values(result);
+        },
 
 
 
