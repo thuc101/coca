@@ -1,0 +1,2 @@
+"use strict";(self["webpackChunkthu_chi"]=self["webpackChunkthu_chi"]||[]).push([[158],{9158:function(u,n,t){t.r(n),t.d(n,{default:function(){return c}});var i=function(){var u=this;u._self._c;return u._m(0)},s=[function(){var u=this,n=u._self._c;return n("div",[n("h1",[u._v("This is Hoa")]),u._v(" this is Hoa ")])}],e=t(1656),h={},r=(0,e.A)(h,i,s,!1,null,null,null),c=r.exports}}]);
+//# sourceMappingURL=158.a15f942c.js.map
